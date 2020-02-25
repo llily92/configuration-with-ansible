@@ -4,7 +4,7 @@
      name: Lily_aws_security
      description: rules allowing traffic on ports 22,80,443,1167
      region: us-west-2
-     vpc_id: vpc-vpc-266afb5e
+     vpc_id: vpc-266afb5e
      rules:
       - proto: tcp
         from_port: 80
