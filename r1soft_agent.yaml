@@ -14,6 +14,7 @@
       package:
         name: serverbackup-enterprise-agent
         state: latest
+      notify: R1soft restart
 
     - name: Power off iptables
       systemd: 
@@ -30,4 +31,10 @@
         state: restarted  
         enabled: yes
          
+  handlers:
+    - name: R1soft restart
+      systemd:
+        name: sbm-agent
+        state: restarted
+        enabled: yes       
    
