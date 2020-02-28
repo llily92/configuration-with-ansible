@@ -3,3 +3,5 @@
     name: sbm-agent
     state: restarted
     enabled: yes
+- name: get key
+  shell: "r1soft-setup --get-key {{BACKUP_SERVER}}"
