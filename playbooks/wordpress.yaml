@@ -1,5 +1,6 @@
+---
 - name: Installs wordpress & Route 53 config
-  hosts: all
+  hosts: localhost
   become: yes
   become_method: sudo
   tasks:
@@ -13,26 +14,19 @@
        - unzip
        - mariadb-server
       ignore_errors: true
-      notify: MARIADB RESTART
-
     - name: Install epel-release
       shell: “sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y”
-  
     - name: config manager enabled
       shell: “sudo yum-config-manager --enable remi-php72”
-  
     - name : update httpd PHP
       shell: “sudo yum install httpd php php-common php-opcache php-mcrypt php-cli php-gd php-curl php-mysql mysql -y”
-      notife: Restart httpd
-
     - name: Download wordpress Package
       get_url:
-        url:  "https://wordpress.org/wordpress-{{WORDPRESS_VERSION}}.tar.gz"
+        url: https://wordpress.org/wordpress-5.2.1.tar.gz
         dest: /tmp/
-
     - name: Unzip wordpres file
       unarchive:
-        src: “/tmp/wordpress-{{WORDPRESS_VERSION}}.tar.gz”
+        src: “/tmp/wordpress-5.2.1.tar.gz”
         dest: “/var/www/html”
         remote_src: yes
       become: yes
@@ -42,7 +36,13 @@
       become: yes
       become_method: sudo
       ignore_errors: yes
-    
+    - name: Restart httpd
+      systemd:
+        name: httpd
+        state: restarted
+        enabled: yes
+      become: yes
+      become_method: sudo
     - name: Create 1 user bob
       user:
         name: bob
@@ -62,8 +62,8 @@
     - name: Route53 a record
       route53:
         state: “present”
-        zone: “safa-g.com”
-        record: “wordpress.safa-g.com”
+        zone: “***”
+        record: “****”
         type: A
         ttl: 7200
         value: “35.176.104.148”
